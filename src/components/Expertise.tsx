@@ -90,7 +90,7 @@ const specialSkills = [
   "AWS", "Node.js", "React", "JavaScript", "TypeScript",
   "Material-UI", "REST APIs", "Serverless", "Cloud Architecture",
   "OpenAI", "Git", "GitHub", "VS Code", "Cursor",
-  "Jira", "Slack", "Postman", "HTML5", "CSS3", "CloudFormation", "CDK", 
+  "Jira", "Slack", "Postman", "HTML5", "CSS3", "CDK", 
   "Prompt Engineering", "Express", "GraphQL", "API Gateway", "Microservices", 
   "PostgreSQL",  "npm", "Lambda", "S3", "Amplify",
   "Jest", "Mocha",
