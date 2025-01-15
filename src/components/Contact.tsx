@@ -10,7 +10,7 @@ import {
   Snackbar
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-// import emailjs from '@emailjs/browser';
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
 const StyledSection = styled(Box)(({ theme }) => ({
   padding: '5% 10%',
@@ -55,44 +55,66 @@ const StyledForm = styled('form')(({ theme }) => ({
   }
 }));
 
+const SES_REGION = "YOUR_AWS_REGION"; // e.g., "us-east-1"
+const SOURCE_EMAIL = "your-verified@email.com"; // Must be verified in SES
+const DESTINATION_EMAIL = "your-destination@email.com"; // Must be verified in SES if in sandbox mode
+
 function Contact() {
   const form = useRef<HTMLFormElement>(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!form.current) return;
 
-    // Uncomment and configure emailjs when ready to implement email functionality
-    /*
-    emailjs.sendForm(
-      'YOUR_SERVICE_ID',
-      'YOUR_TEMPLATE_ID',
-      form.current,
-      'YOUR_PUBLIC_KEY'
-    ).then(
-      (result) => {
-        setSnackbarMessage('Message sent successfully!');
-        setSnackbarSeverity('success');
-        setOpenSnackbar(true);
-        form.current?.reset();
-      },
-      (error) => {
-        setSnackbarMessage('Failed to send message. Please try again.');
-        setSnackbarSeverity('error');
-        setOpenSnackbar(true);
-      }
-    );
-    */
+    const formData = new FormData(form.current);
+    const name = formData.get('user_name');
+    const email = formData.get('user_email');
+    const message = formData.get('message');
 
-    // Temporary success message (remove when implementing emailjs)
-    setSnackbarMessage('Message sent successfully!');
-    setSnackbarSeverity('success');
-    setOpenSnackbar(true);
-    form.current?.reset();
+    try {
+      const sesClient = new SESClient({ 
+        region: SES_REGION,
+        credentials: {
+          accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID!,
+          secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY!
+        }
+      });
+
+      const command = new SendEmailCommand({
+        Source: SOURCE_EMAIL,
+        Destination: {
+          ToAddresses: [DESTINATION_EMAIL],
+        },
+        Message: {
+          Subject: {
+            Data: `Portfolio Contact Form: Message from ${name}`,
+            Charset: "UTF-8",
+          },
+          Body: {
+            Text: {
+              Data: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+              Charset: "UTF-8",
+            },
+          },
+        },
+      });
+
+      await sesClient.send(command);
+      
+      setSnackbarMessage('Message sent successfully!');
+      setSnackbarSeverity('success');
+      setOpenSnackbar(true);
+      form.current?.reset();
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setSnackbarMessage('Failed to send message. Please try again.');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+    }
   };
 
   return (
