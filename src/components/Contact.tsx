@@ -67,27 +67,32 @@ function Contact() {
     if (!form.current) return;
 
     const formData = new FormData(form.current);
-    const name = formData.get('user_name');
-    const email = formData.get('user_email');
-    const message = formData.get('message');
+    const name = formData.get('user_name') as string;
+    const email = formData.get('user_email') as string;
+    const message = formData.get('message') as string;
+
+    if (!name || !email || !message) {
+      setSnackbarMessage('Please fill in all fields');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+      return;
+    }
 
     try {
-      const response = await post(
-        {
-          apiName: 'contactAPI',
-          path: '/contact',
-          options: {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              name,
-              email,
-              message
-            })
-          }
+      const response = await post({
+        apiName: 'contactAPI',
+        path: '/contact',
+        options: {
+          body: {
+            name,
+            email,
+            message
+          },
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
-      )
+      });
       console.log(response);
 
       setSnackbarMessage('Message sent successfully!');

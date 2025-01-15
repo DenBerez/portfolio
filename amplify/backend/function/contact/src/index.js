@@ -3,7 +3,7 @@ const { SESClient, SendEmailCommand } = require("@aws-sdk/client-ses");
 const SES_REGION = "us-east-1";
 const SOURCE_EMAIL = "dennis.m.berezin@gmail.com";
 const DESTINATION_EMAIL = "dennis.m.berezin@gmail.com";
-const DOMAIN = "https://master.d1mj8ksphr3rf2.amplifyapp.com/";
+const DOMAIN = "*";
 
 const sesClient = new SESClient({ region: SES_REGION });
 

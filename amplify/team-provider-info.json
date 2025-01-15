@@ -15,7 +15,7 @@
       "function": {
         "contact": {
           "deploymentBucketName": "amplify-myportfolio-dev-267e9-deployment",
-          "s3Key": "amplify-builds/contact-6b506351536a526d5868-build.zip"
+          "s3Key": "amplify-builds/contact-502b425a335377774943-build.zip"
         }
       },
       "api": {
