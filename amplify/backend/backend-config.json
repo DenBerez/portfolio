@@ -1,0 +1,43 @@
+{
+  "api": {
+    "contactAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "contact"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "contact": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_contact_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "contact"
+        }
+      ]
+    },
+    "AMPLIFY_function_contact_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "contact"
+        }
+      ]
+    }
+  }
+}

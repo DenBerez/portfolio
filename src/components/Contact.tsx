@@ -10,7 +10,7 @@ import {
   Snackbar
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import { post } from '@aws-amplify/api';
 
 const StyledSection = styled(Box)(({ theme }) => ({
   padding: '5% 10%',
@@ -55,10 +55,6 @@ const StyledForm = styled('form')(({ theme }) => ({
   }
 }));
 
-const SES_REGION = "YOUR_AWS_REGION"; // e.g., "us-east-1"
-const SOURCE_EMAIL = "your-verified@email.com"; // Must be verified in SES
-const DESTINATION_EMAIL = "your-destination@email.com"; // Must be verified in SES if in sandbox mode
-
 function Contact() {
   const form = useRef<HTMLFormElement>(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -76,41 +72,30 @@ function Contact() {
     const message = formData.get('message');
 
     try {
-      const sesClient = new SESClient({ 
-        region: SES_REGION,
-        credentials: {
-          accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID!,
-          secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY!
-        }
-      });
-
-      const command = new SendEmailCommand({
-        Source: SOURCE_EMAIL,
-        Destination: {
-          ToAddresses: [DESTINATION_EMAIL],
-        },
-        Message: {
-          Subject: {
-            Data: `Portfolio Contact Form: Message from ${name}`,
-            Charset: "UTF-8",
-          },
-          Body: {
-            Text: {
-              Data: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
-              Charset: "UTF-8",
+      const response = await post(
+        {
+          apiName: 'contactAPI',
+          path: '/contact',
+          options: {
+            headers: {
+              'Content-Type': 'application/json',
             },
-          },
-        },
-      });
+            body: JSON.stringify({
+              name,
+              email,
+              message
+            })
+          }
+        }
+      )
+      console.log(response);
 
-      await sesClient.send(command);
-      
       setSnackbarMessage('Message sent successfully!');
       setSnackbarSeverity('success');
       setOpenSnackbar(true);
       form.current?.reset();
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.error('Error sending message:', error);
       setSnackbarMessage('Failed to send message. Please try again.');
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
