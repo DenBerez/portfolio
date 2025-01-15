@@ -1,10 +1,10 @@
-import React from "react";
-import { Box, IconButton, Typography, styled } from '@mui/material';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import React, { useState } from "react";
+import { Box, IconButton, Typography, styled, Dialog } from '@mui/material';
+import { SocialIcons } from './SocialIcons';
 
 const StyledFooter = styled(Box)(({ theme }) => ({
   textAlign: 'center',
+  zIndex: 100,
   padding: theme.spacing(6, 0),
   '& .MuiIconButton-root': {
     color: theme.palette.text.primary,
@@ -36,22 +36,16 @@ const StyledFooter = styled(Box)(({ theme }) => ({
 function Footer() {
   return (
     <StyledFooter component="footer">
-      <Box>
-        <IconButton 
-          href="https://github.com/DenBerez" 
-          target="_blank" 
-          rel="noreferrer"
-        >
-          <GitHubIcon />
-        </IconButton>
-        <IconButton 
-          href="https://www.linkedin.com/in/dennis-berezin/" 
-          target="_blank" 
-          rel="noreferrer"
-        >
-          <LinkedInIcon />
-        </IconButton>
+      <Box //center social icons
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <SocialIcons tooltipPlacement="top" />
       </Box>
+
       <Typography>
         A portfolio designed & built by{' '}
         <a 

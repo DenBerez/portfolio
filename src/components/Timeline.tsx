@@ -10,6 +10,7 @@ import { Code, Cloud, School, Work } from '@mui/icons-material';
 const StyledSection = styled(Box)(({ theme }) => ({
   padding: '5% 10%',
   textAlign: 'left',
+  zIndex: 1000,
   [theme.breakpoints.down('md')]: {
     padding: '5%',
   },

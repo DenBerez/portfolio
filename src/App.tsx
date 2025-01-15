@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { ThemeProvider, createTheme, CssBaseline, GlobalStyles as MuiGlobalStyles } from '@mui/material';
+import { ThemeProvider, createTheme, CssBaseline, GlobalStyles as MuiGlobalStyles, Box, styled } from '@mui/material';
 import {
   Main,
   Timeline,
@@ -12,9 +12,39 @@ import {
 import FadeIn from './components/FadeIn';
 import { Theme } from '@mui/material/styles';
 import { getTheme } from './theme';
+import bgDark from './assets/images/bg-dark.png';
+import bgLight from './assets/images/bg-light.png';
+
+const BackgroundWrapper = styled(Box)(({ theme }) => ({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  opacity: 0.5,
+  overflow: 'hidden',
+  zIndex: -200,
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: '-20%',
+    left: '-10%',
+    width: '120%',
+    height: '140%',
+    backgroundImage: theme.palette.mode === 'dark' ? 
+      `url(${bgDark})` : `url(${bgLight})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    transform: 'translate3d(0, 0, 0)',
+    willChange: 'transform',
+    zIndex: -1,
+    transition: 'transform 0.1s ease-out',
+  }
+}));
 
 function App() {
     const [mode, setMode] = useState<string>('dark');
+    const [scrollPosition, setScrollPosition] = useState(0);
 
     const theme = getTheme(mode as 'light' | 'dark');
 
@@ -23,7 +53,14 @@ function App() {
     }
 
     useEffect(() => {
-        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+        const handleScroll = () => {
+          requestAnimationFrame(() => {
+            setScrollPosition(window.pageYOffset);
+          });
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     return (
@@ -45,22 +82,28 @@ function App() {
               '&:hover': {
                 color: theme.palette.primary.dark,
               },
-          
             },
             '*': {
               boxSizing: 'border-box',
             }
           })}
         />
-            <Navigation parentToChild={{mode}} modeChange={handleModeChange}/>
-            <FadeIn transitionDuration={700}>
-                <Main/>
-                <Expertise/>
-                <Timeline/>
-                <Project/>
-                <Contact/>
-            </FadeIn>
-            <Footer />
+        <BackgroundWrapper
+          sx={{
+            '&::before': {
+              transform: `translate3d(0, ${scrollPosition * 0.1}px, 0)`,
+            }
+          }}
+        />
+        <Navigation parentToChild={{mode}} modeChange={handleModeChange}/>
+        <FadeIn transitionDuration={700}>
+            <Main/>
+            <Expertise/>
+            <Timeline/>
+            <Project/>
+            <Contact/>
+        </FadeIn>
+        <Footer />
       </ThemeProvider>
     );
 }
