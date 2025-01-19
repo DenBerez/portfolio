@@ -71,7 +71,7 @@ export function SocialIcons({
         fullWidth
       >
         <object
-          data="/resume.pdf"
+          data={process.env.PUBLIC_URL + '/resume.pdf'}
           type="application/pdf"
           style={{ 
             border: 'none',
@@ -79,7 +79,18 @@ export function SocialIcons({
             height: '100%'
           }}
         >
-          <p>Unable to display PDF file. <a href="/resume.pdf" download>Download</a> instead.</p>
+          <embed src={process.env.PUBLIC_URL + '/resume.pdf'} type="application/pdf" />
+          <p>
+            Unable to display PDF file.{' '}
+            <a href={process.env.PUBLIC_URL + '/resume.pdf'} target="_blank" rel="noopener noreferrer">
+              Open in new tab
+            </a>
+            {' '}or{' '}
+            <a href={process.env.PUBLIC_URL + '/resume.pdf'} download>
+              download
+            </a>
+            {' '}instead.
+          </p>
         </object>
       </Dialog>
     </>

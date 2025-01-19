@@ -1,193 +1,243 @@
 import React from "react";
-import { Box, Chip, Typography, styled, Button } from '@mui/material';
+import { Box, Chip, Typography, styled, Button, SxProps, Theme } from '@mui/material';
 import ka from "../assets/images/ka.png";
 import cg from "../assets/images/cg.png";
+import { ProjectData, PROJECTS_DATA } from '../data/projects';
+import ShowMoreButton from './ShowMoreButton';
 
 const StyledSection = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  padding: '5% 10%',
+  padding: '8% 12%',
   textAlign: 'left',
   [theme.breakpoints.down('md')]: {
-    padding: '5%',
+    padding: '10% 5%',
   }
 }));
 
 const ProjectsGrid = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: 'repeat(2, 1fr)',
-  gap: theme.spacing(6),
+  gap: theme.spacing(8),
   '& img': {
     width: '100%',
-    height: 300,
+    height: 350,
     objectFit: 'cover',
-    borderRadius: theme.shape.borderRadius,
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.standard,
-    }),
+    borderRadius: theme.shape.borderRadius * 2,
+    transition: 'all 0.3s ease-in-out',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
     '&:hover': {
-      transform: 'scale(1.02)',
+      transform: 'scale(1.03)',
+      boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
     }
   },
   '& .project': {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    padding: theme.spacing(3),
+    borderRadius: theme.shape.borderRadius,
   },
   [theme.breakpoints.down('md')]: {
     gridTemplateColumns: '1fr',
-    gap: theme.spacing(4),
+    gap: theme.spacing(6),
     '& .project': {
-      paddingBottom: theme.spacing(4),
+      paddingBottom: theme.spacing(6),
     }
   }
 }));
 
 const ProjectTitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.primary,
-  fontWeight: theme.typography.h4.fontWeight,
-  transition: theme.transitions.create('color', {
-    duration: theme.transitions.duration.shorter,
-  }),
+  fontWeight: 600,
+  fontSize: '1.5rem',
+  marginTop: theme.spacing(2),
+  transition: 'color 0.2s ease-in-out',
   '&:hover': {
     color: theme.palette.primary.main,
-    // textDecoration: 'underline',
   }
 }));
 
 const ProjectDescription = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
-  marginTop: theme.spacing(1),
-  marginBottom: theme.spacing(2),
+  marginTop: theme.spacing(1.5),
+  marginBottom: theme.spacing(2.5),
+  lineHeight: 1.6,
 }));
 
 
 const ChipContainer = styled(Box)(({ theme }) => ({
-  lineHeight: 2,
+  lineHeight: 2.2,
   margin: theme.spacing(0.5, 0),
   '& .MuiChip-root': {
-    marginRight: theme.spacing(0.5),
-    marginBottom: theme.spacing(0.5),
-    backgroundColor: theme.palette.background.paper,
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    padding: theme.spacing(0.5, 0),
+    backgroundColor: theme.palette.mode === 'dark' 
+      ? 'rgba(255, 255, 255, 0.05)'
+      : 'rgba(0, 0, 0, 0.04)',
     borderColor: theme.palette.mode === 'dark' 
-      ? 'rgba(255, 255, 255, 0.15)' 
-      : 'rgba(0, 0, 0, 0.12)',
-    transition: theme.transitions.create(['background-color', 'color', 'border-color'], {
-      duration: theme.transitions.duration.shorter,
-    }),
+      ? 'rgba(255, 255, 255, 0.12)' 
+      : 'rgba(0, 0, 0, 0.08)',
+    '&:hover': {
+      backgroundColor: theme.palette.mode === 'dark' 
+        ? 'rgba(255, 255, 255, 0.08)'
+        : 'rgba(0, 0, 0, 0.08)',
+    },
     '& .MuiChip-label': {
       fontFamily: 'source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace',
-      color: theme.palette.text.primary,
+      fontSize: '0.85rem',
+      fontWeight: 500,
     }
   }
 }));
 
-function Project() {
-  const [showAll, setShowAll] = React.useState(false);
+// New interfaces
+interface ProjectSectionProps {
+  title: string;
+  projects: readonly ProjectData[];
+  sx?: SxProps<Theme>;
+}
 
-  const projects = [
-      {
-      title: "Reco",
-      description: "A media recommendation app that allows users to search, save, rate and analyze any type of media.",
-      image: "https://placehold.co/600x400/1a1a1a/ffffff?text=Coming Soon",
-      link: "https://github.com/DenBerez/reco",
-      technologies: ["React", "Vite", "Material UI", "Node.js", "AWS Amplify", "GraphQL", "DynamoDB"],
-      extended: false,
-      comingSoon: true,
-    },
-    {
-      title: "Web Scraper API",
-      description: "A web scraper API that allows users to scrape data from websites.",
-      image: "https://placehold.co/600x400/1a1a1a/ffffff?text=Coming Soon",
-      link: "https://github.com/DenBerez/webscraper-api",
-      technologies: ["Javascript", "API Gateway"],
-      extended: false,
-      comingSoon: true,
-    },
-    {
-      title: "Atelier",
-      description: "Refactored and webscaled a legacy website.",
-      image: "https://placehold.co/600x400/1a1a1a/ffffff?text=Atelier",
-      link: "https://github.com/DenBerez/Atelier-Azathoth",
-      technologies: ["MySQL", "PostgreSQL", "EC2", "Javascript", "Node.js", "Express", "AWS", "NGINX", "K6", "Loader.io"],
-      extended: false,
-    },
-    {
-      title: "Catwalk",
-      description: "Frontend for an ecommerce website.",
-      image: cg,
-      link: "https://github.com/DenBerez/Catwalk-Gandalf",
-      technologies: ["Javascript", "Node.js", "Express"],
-      extended: false,
-    },
-    {
-      title: "Fullmaker",
-      description: "A Discord bot that allows users to advertise, join and fill events.",
-      image: "https://placehold.co/600x400/1a1a1a/ffffff?text=Fullmaker",
-      link: "https://github.com/DenBerez/Fullmaker",
-      technologies: ["Javascript", "Discord.js"],
-      extended: true,
-    },
-    {
-      title: "Kane Academy",
-      description: "A full-stack skillshare platform.",
-      image: ka,
-      link: "https://github.com/DenBerez/Kane-Academy",
-      technologies: ["Javascript", "Node.js", "Express", "PostgreSQL", "Material UI", "Google Calendar API", "Google API"],
-      extended: true,
-    },
-  
-  ];
+const SectionDivider = styled(Box)(({ theme }) => ({
+  width: '40px',
+  height: '4px',
+  backgroundColor: theme.palette.primary.main,
+  marginBottom: theme.spacing(3),
+  borderRadius: theme.shape.borderRadius,
+}));
 
-  const visibleProjects = showAll ? projects : projects.slice(0, 4);
-
-  return (
-    <StyledSection id="projects">
-      <Typography variant="h4" gutterBottom>
-        Personal Projects
+// New ProjectSection component
+const ProjectSection: React.FC<ProjectSectionProps> = ({ title, projects, sx }) => (
+  <>
+    <Box sx={{ mb: 4 }}>
+      <Typography 
+        variant="h5" 
+        gutterBottom 
+        sx={{ 
+          fontWeight: 600,
+          fontSize: '1.8rem',
+          ...sx 
+        }}
+      >
+        {title}
       </Typography>
-      
-      <ProjectsGrid>
-        {visibleProjects.map((project, index) => (
-          <Box key={index} className="project">
+    </Box>
+    <ProjectsGrid>
+      {projects.map((project, index) => (
+        <Box key={index} className="project">
+          {project.image && (
             <a href={project.link} target="_blank" rel="noreferrer">
               <img src={project.image} alt={project.title} className="zoom" />
             </a>
-            <a href={project.link} target="_blank" rel="noreferrer">
-              <ProjectTitle variant="h5" gutterBottom>{project.title}</ProjectTitle>
-            </a>
-            <ProjectDescription variant="body1">
-              {project.description}
-            </ProjectDescription>
-            <ChipContainer>
-              {project.technologies.map((tech, i) => (
-                <Chip key={i} variant="outlined" label={tech} />
-              ))}
-            </ChipContainer>
-          </Box>
-        ))}
-      </ProjectsGrid>
+          )}
+          <a href={project.link} target="_blank" rel="noreferrer">
+            <ProjectTitle variant="h5" gutterBottom>{project.title}</ProjectTitle>
+          </a>
+          <ProjectDescription variant="body1">
+            {project.description}
+          </ProjectDescription>
+          <ChipContainer>
+            {project.technologies.map((tech, i) => (
+              <Chip key={i} variant="outlined" label={tech} />
+            ))}
+          </ChipContainer>
+        </Box>
+      ))}
+    </ProjectsGrid>
+  </>
+);
 
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        mt: 4,
-        position: 'relative',
-        zIndex: 1,
-      }}>
-        <Button 
-          onClick={() => {
-            setShowAll(!showAll);
-            const section = document.getElementById('projects');
-            if (section) {
-              section.scrollIntoView({ behavior: 'smooth' });
-            }
+function Project() {
+  const [showAllPersonal, setShowAllPersonal] = React.useState(false);
+  const [showAllProfessional, setShowAllProfessional] = React.useState(false);
+  const [showAllAcademic, setShowAllAcademic] = React.useState(false);
+
+  const getVisibleProjects = (projects: readonly ProjectData[], showAll: boolean) => {
+    return showAll ? projects : projects.slice(0, 2);
+  };
+
+  return (
+    <StyledSection id="projects">
+      <Box sx={{ mb: 4 }}>
+        <Typography 
+          variant="h4" 
+          gutterBottom 
+          sx={{ 
+            fontWeight: 600
           }}
-          variant="contained"
-          color="primary"
         >
-          {showAll ? 'Show Less' : 'Show More'}
-        </Button>
+          Projects
+        </Typography>
+      </Box>
+      <Typography 
+        variant="body1" 
+        sx={{ 
+          color: 'text.secondary',
+          maxWidth: '600px',
+          mb: 6
+        }}
+      >
+        A collection of my professional, personal, and academic work showcasing my development journey.
+      </Typography>
+
+      <SectionDivider />
+
+
+      <Box 
+        id="professional-projects" 
+        sx={{ 
+          mb: 12,
+          pb: 6,
+          borderBottom: theme => `1px solid ${theme.palette.divider}`
+        }}
+      >
+        <ProjectSection 
+          title="Professional Projects" 
+          projects={getVisibleProjects(PROJECTS_DATA.professional, showAllProfessional)} 
+        />
+        <ShowMoreButton 
+          showAll={showAllProfessional}
+          setShowAll={setShowAllProfessional}
+          totalCount={PROJECTS_DATA.professional.length}
+          scrollToId="professional-projects"
+        />
+      </Box>
+
+      <Box 
+        id="personal-projects" 
+        sx={{ 
+          mb: 12,
+          pb: 6,
+          borderBottom: theme => `1px solid ${theme.palette.divider}`
+        }}
+      >
+        <ProjectSection 
+          title="Personal Projects" 
+          projects={getVisibleProjects(PROJECTS_DATA.personal, showAllPersonal)} 
+        />
+        <ShowMoreButton 
+          showAll={showAllPersonal}
+          setShowAll={setShowAllPersonal}
+          totalCount={PROJECTS_DATA.personal.length}
+          scrollToId="personal-projects"
+        />
+      </Box>
+
+      <Box 
+        id="academic-projects" 
+        sx={{ mb: 8 }}
+      >
+        <ProjectSection 
+          title="Academic Projects" 
+          projects={getVisibleProjects(PROJECTS_DATA.academic, showAllAcademic)} 
+        />
+        <ShowMoreButton 
+          showAll={showAllAcademic}
+          setShowAll={setShowAllAcademic}
+          totalCount={PROJECTS_DATA.academic.length}
+          scrollToId="academic-projects"
+        />
       </Box>
     </StyledSection>
   );

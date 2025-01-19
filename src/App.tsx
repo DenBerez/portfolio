@@ -42,6 +42,29 @@ const BackgroundWrapper = styled(Box)(({ theme }) => ({
   }
 }));
 
+const Section = styled(Box)(({ theme }) => ({
+  minHeight: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  padding: theme.spacing(8, 0), // Reduced padding
+  '&:first-of-type': {
+    paddingTop: theme.spacing(12), // Reduced top padding
+  },
+  '&:last-of-type': {
+    paddingBottom: theme.spacing(8),
+  },
+  [theme.breakpoints.down('md')]: {
+    padding: theme.spacing(6, 0), // Reduced padding for mobile
+    '&:first-of-type': {
+      paddingTop: theme.spacing(10), // Adjusted for mobile
+    },
+    '&:last-of-type': {
+      paddingBottom: theme.spacing(6),
+    },
+  }
+}));
+
 function App() {
     const [mode, setMode] = useState<string>('dark');
     const [scrollPosition, setScrollPosition] = useState(0);
@@ -97,11 +120,21 @@ function App() {
         />
         <Navigation parentToChild={{mode}} modeChange={handleModeChange}/>
         <FadeIn transitionDuration={700}>
+          <Section>
             <Main/>
+          </Section>
+          <Section>
             <Expertise/>
+          </Section>
+          <Section>
             <Timeline/>
+          </Section>
+          <Section>
             <Project/>
+          </Section>
+          <Section>
             <Contact/>
+          </Section>
         </FadeIn>
         <Footer />
       </ThemeProvider>

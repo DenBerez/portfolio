@@ -177,15 +177,14 @@ function Timeline() {
           <Box sx={{ 
             display: 'flex', 
             justifyContent: 'center', 
-            my: 2,
+            mt: 4,
+            mb: 6,
             position: 'relative',
             zIndex: 1,
-     
           }}>
             <Button 
               onClick={() => {
                 setShowAll(!showAll)
-                //scroll to top fo section
                 const section = document.getElementById('history');
                 if (section) {
                   section.scrollIntoView({ behavior: 'smooth' });
@@ -193,8 +192,20 @@ function Timeline() {
               }}
               variant="contained"
               color="primary"
+              sx={{
+                px: 4,
+                py: 1,
+                borderRadius: 2,
+                textTransform: 'none',
+                fontSize: '1rem',
+                fontWeight: 500,
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  transition: 'transform 0.2s ease-in-out',
+                }
+              }}
             >
-              {showAll ? 'Show Less' : 'Show All'}
+              {showAll ? 'Show Less' : 'Show More'}
             </Button>
           </Box>
         )}

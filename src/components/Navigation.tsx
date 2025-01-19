@@ -22,30 +22,33 @@ const navItems = [['Home', 'home'], ['Expertise', 'expertise'], ['History', 'his
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' 
-    ? 'rgba(13, 17, 22, 0.8)' 
-    : 'rgba(255, 255, 255, 0.8)',
-  backdropFilter: 'blur(8px)',
-  boxShadow: `0 1px 0 ${
-    theme.palette.mode === 'dark'
-      ? 'rgba(255, 255, 255, 0.1)'
-      : 'rgba(0, 0, 0, 0.1)'
-  }`,
+    ? 'rgba(13, 17, 22, 0.9)'
+    : 'rgba(255, 255, 255, 0.9)',
+  backdropFilter: 'blur(12px)',
+  boxShadow: theme.palette.mode === 'dark'
+    ? '0 1px 8px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.1)'
+    : '0 1px 8px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(0, 0, 0, 0.1)',
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
   color: theme.palette.text.primary,
-  fontSize: theme.typography.body1.fontSize,
-  fontWeight: theme.typography.button?.fontWeight,
+  fontSize: '0.95rem',
+  fontWeight: 500,
   textTransform: 'none',
-  padding: theme.spacing(1, 2),
-  borderRadius: theme.shape.borderRadius,
-  transition: theme.transitions.create(['background-color', 'color'], {
-    duration: theme.transitions.duration.short,
+  padding: theme.spacing(1.5, 2.5),
+  margin: theme.spacing(0, 0.5),
+  borderRadius: theme.shape.borderRadius * 1.5,
+  transition: theme.transitions.create(['background-color', 'color', 'transform'], {
+    duration: theme.transitions.duration.shorter,
   }),
   '&:hover': {
     backgroundColor: theme.palette.mode === 'dark'
-      ? 'rgba(255, 255, 255, 0.1)'
-      : 'rgba(0, 0, 0, 0.1)',
+      ? 'rgba(255, 255, 255, 0.08)'
+      : 'rgba(0, 0, 0, 0.06)',
+    transform: 'translateY(-1px)',
+  },
+  '&:active': {
+    transform: 'translateY(0)',
   }
 }));
 
@@ -95,17 +98,28 @@ function Navigation(props: NavigationProps) {
   return (
     <>
       <StyledAppBar position="fixed">
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Toolbar sx={{ 
+          justifyContent: 'space-between',
+          minHeight: '64px',
+          px: { xs: 2, sm: 4 },
+        }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ display: { sm: 'none' } }}
+            sx={{ 
+              display: { sm: 'none' },
+              color: (theme) => theme.palette.text.primary
+            }}
           >
             <MenuIcon />
           </IconButton>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+          <Box sx={{ 
+            display: { xs: 'none', sm: 'flex' },
+            alignItems: 'center',
+            gap: 1
+          }}>
             {navItems.map((item) => (
               item[0] === 'Home' ? (
               <StyledButton 
@@ -127,6 +141,18 @@ function Navigation(props: NavigationProps) {
           <IconButton 
             onClick={props.modeChange}
             color={props.parentToChild.mode === 'dark' ? 'default' : 'primary'}
+            sx={{
+              borderRadius: theme => theme.shape.borderRadius * 1.5,
+              transition: theme => theme.transitions.create(['background-color', 'transform'], {
+                duration: theme.transitions.duration.shorter,
+              }),
+              '&:hover': {
+                transform: 'translateY(-1px)',
+              },
+              '&:active': {
+                transform: 'translateY(0)',
+              }
+            }}
           >
             {props.parentToChild.mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
           </IconButton>
