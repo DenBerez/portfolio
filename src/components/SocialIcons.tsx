@@ -10,6 +10,8 @@ interface SocialIconsProps {
   tooltipPlacement?: "top" | "bottom";
 }
 
+const RESUME_URL = 'https://dmb-resume.s3.us-east-1.amazonaws.com/resume.pdf';
+
 export function SocialIcons({ 
   direction = "row", 
   className, 
@@ -71,7 +73,7 @@ export function SocialIcons({
         fullWidth
       >
         <object
-          data={process.env.PUBLIC_URL + '/resume.pdf'}
+          data={RESUME_URL}
           type="application/pdf"
           style={{ 
             border: 'none',
@@ -79,14 +81,14 @@ export function SocialIcons({
             height: '100%'
           }}
         >
-          <embed src={process.env.PUBLIC_URL + '/resume.pdf'} type="application/pdf" />
+          <embed src={RESUME_URL} type="application/pdf" />
           <p>
             Unable to display PDF file.{' '}
-            <a href={process.env.PUBLIC_URL + '/resume.pdf'} target="_blank" rel="noopener noreferrer">
+            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer">
               Open in new tab
             </a>
             {' '}or{' '}
-            <a href={process.env.PUBLIC_URL + '/resume.pdf'} download>
+            <a href={RESUME_URL} download>
               download
             </a>
             {' '}instead.
