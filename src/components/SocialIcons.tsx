@@ -10,7 +10,7 @@ interface SocialIconsProps {
   tooltipPlacement?: "top" | "bottom";
 }
 
-const RESUME_URL = 'https://dmb-resume.s3.us-east-1.amazonaws.com/resume.pdf';
+const RESUME_URL = 'https://dmb-resume.s3.us-east-1.amazonaws.com/resume121.pdf';
 
 export function SocialIcons({ 
   direction = "row", 

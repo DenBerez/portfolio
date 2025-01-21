@@ -35,6 +35,14 @@ export const PROJECTS_DATA = {
   ],
   personal: [
     {
+      title: "DenBox",
+      description: "A Jackbox clone to play various part games with your friends.",
+      image: "https://placehold.co/600x400/1a1a1a/ffffff?text=Coming Soon",
+      link: "https://github.com/DenBerez/denbox",
+      technologies: ["React", "Next,js", "Material UI", "Node.js", "AWS Amplify", "GraphQL", "DynamoDB", "Lambda", "S3", "IAM", "API Gateway", "Typescript"],
+      comingSoon: true,
+    },
+    {
       title: "Reco",
       description: "A media recommendation app that allows users to search, save, rate and analyze any type of media.",
       image: "https://placehold.co/600x400/1a1a1a/ffffff?text=Coming Soon",

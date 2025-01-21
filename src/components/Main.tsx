@@ -5,7 +5,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import DescriptionIcon from '@mui/icons-material/Description';
 import bgDark from '../assets/images/bg-dark.png';
 import bgLight from '../assets/images/bg-light.png';
-import headshot from '../assets/images/headshot.jpg';
+import headshot2 from '../assets/images/headshot2.jpg';
 import { SocialIcons } from './SocialIcons';
 import { Pin, PinDrop } from "@mui/icons-material";
 
@@ -114,7 +114,7 @@ function Main() {
           }}
         >
           <ImageWrapper>
-            <img src={headshot} alt="Dennis Berezin" />
+            <img src={headshot2} alt="Dennis Berezin" />
           </ImageWrapper>
           <Content>
             <Typography variant="h1" component="h1">Dennis Berezin</Typography>
